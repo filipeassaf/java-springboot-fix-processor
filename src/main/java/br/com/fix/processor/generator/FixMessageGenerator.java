@@ -39,6 +39,11 @@ public class FixMessageGenerator {
         INSTRUMENTOS = instrumentosStr.split(",");
     }
 
+    // Torna o método initArrays visível para teste
+    void initArraysForTest() {
+        initArrays();
+    }
+
     public void generateFixMessages(String filePath) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (int i = 0; i < totalMessages; i++) {

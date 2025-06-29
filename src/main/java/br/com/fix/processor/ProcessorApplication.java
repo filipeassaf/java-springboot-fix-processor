@@ -35,7 +35,10 @@ public class ProcessorApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws IOException {
-        runMenu();
+        // Só executa o menu se houver entrada padrão disponível
+        if (System.console() != null || System.in.available() > 0) {
+            runMenu();
+        }
     }
 
     // Método para executar o menu (pode ser chamado após o contexto Spring estar pronto)
