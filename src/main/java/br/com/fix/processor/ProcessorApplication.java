@@ -84,6 +84,7 @@ public class ProcessorApplication implements CommandLineRunner {
                 case 0:
                     System.out.println("Encerrando aplicação.");
                     scanner.close();
+                    System.exit(0); // Garante o encerramento da aplicação ao rodar via jar
                     return;
                 default:
                     System.out.println("Opção inválida.");
