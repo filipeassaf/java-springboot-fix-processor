@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+data/AllMsgs.csv
+data/FulFill.txt
+data/input_fix.txt
