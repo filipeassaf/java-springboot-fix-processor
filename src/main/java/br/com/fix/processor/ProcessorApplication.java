@@ -46,10 +46,10 @@ public class ProcessorApplication implements CommandLineRunner {
         Scanner scanner = new Scanner(System.in);
         System.out.println("\nBem-vindo ao Fix Processor");
         System.out.println("Escolha uma opção:");
-        System.out.println("1 - Gerar massa de dados FIX (Parte 1)");
+        System.out.println("1 - Gerar input_fix.txt (Parte 1)");
         System.out.println("2 - Gerar AllMsgs.csv (Parte 2.1)");
         System.out.println("3 - Gerar FulFill.txt (Parte 2.2)");
-        System.out.println("4 - Executar tudo (1 > 2.1 > 2.2)");
+        System.out.println("4 - Executar tudo (1 > 2 > 3)");
         System.out.println("0 - Sair");
         while (true) {
             System.out.print("Digite a opção: ");
