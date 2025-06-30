@@ -54,7 +54,7 @@ public class FixMessageGenerator3 {
             lines.add(fixMessage);
         }
         // Loga no terminal o nome da thread, ação e quantidade de linhas processadas
-        System.out.println("[" + Thread.currentThread().getName() + "] Gerando input_fix.txt: " + lines.size() + " linhas processadas neste chunk.");
+        System.out.println("[" + Thread.currentThread().getName() + "] Gerando input_fix.txt: " + lines.size() + " linhas processadas.");
         synchronized (FixMessageGenerator3.class) {
             Files.write(Paths.get(filePath), lines, java.nio.file.StandardOpenOption.APPEND, java.nio.file.StandardOpenOption.CREATE);
         }

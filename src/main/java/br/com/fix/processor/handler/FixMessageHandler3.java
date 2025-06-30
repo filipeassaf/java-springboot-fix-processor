@@ -185,7 +185,7 @@ public class FixMessageHandler3 {
             );
             linesToWrite.add(csvLine);
         }
-        System.out.println("[" + Thread.currentThread().getName() + "] Gerando AllMsgs.csv: " + linesToWrite.size() + " linhas processadas neste chunk.");
+        System.out.println("[" + Thread.currentThread().getName() + "] Gerando AllMsgs.csv: " + linesToWrite.size() + " linhas processadas.");
         synchronized (FixMessageHandler3.class) {
             if (start == 0) {
                 Files.write(Paths.get(outputCsvPath), new byte[0]);
@@ -196,12 +196,24 @@ public class FixMessageHandler3 {
 
     public void processFullFillsMultiThread(String inputPath, String outputPath, int numThreads) throws IOException, InterruptedException {
         List<String> allLines = Files.readAllLines(Paths.get(inputPath));
-        int total = allLines.size();
-        int chunk = total / numThreads;
-        int remainder = total % numThreads;
-        Thread[] threads = new Thread[numThreads];
-        String[] tempFiles = new String[numThreads];
-        for (int t = 0; t < numThreads; t++) {
+        // Filtra apenas as linhas relevantes antes de dividir entre as threads
+        List<String> filteredLines = new ArrayList<>();
+        for (String line : allLines) {
+            Map<String, String> tags = parseFixLineQuickFix(line);
+            String ordStatus = tags.get("39");
+            String execType = tags.get("150");
+            if ("2".equals(ordStatus) && "F".equals(execType)) {
+                filteredLines.add(line);
+            }
+        }
+        int total = filteredLines.size();
+        int threadsToUse = Math.min(numThreads, total);
+        if (threadsToUse == 0) threadsToUse = 1;
+        int chunk = total / threadsToUse;
+        int remainder = total % threadsToUse;
+        Thread[] threads = new Thread[threadsToUse];
+        String[] tempFiles = new String[threadsToUse];
+        for (int t = 0; t < threadsToUse; t++) {
             int start = t * chunk + Math.min(t, remainder);
             int end = start + chunk + (t < remainder ? 1 : 0);
             String tempFile = outputPath + ".tmp." + t;
@@ -211,7 +223,7 @@ public class FixMessageHandler3 {
             final int threadId = t;
             threads[t] = new Thread(() -> {
                 try {
-                    processFullFillsRangeLines(allLines, tempFile, threadStart, threadEnd, threadId);
+                    processFullFillsRangeLines(filteredLines, tempFile, threadStart, threadEnd, threadId);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -266,7 +278,7 @@ public class FixMessageHandler3 {
             }
             linesToWrite.add(fixLine.toString());
         }
-        System.out.println("[" + Thread.currentThread().getName() + "] Gerando FulFill.txt: " + linesToWrite.size() + " linhas processadas neste chunk.");
+        System.out.println("[" + Thread.currentThread().getName() + "] Gerando FulFill.txt: " + linesToWrite.size() + " linhas processadas.");
         synchronized (FixMessageHandler3.class) {
             if (start == 0) {
                 Files.write(Paths.get(outputPath), new byte[0]);
