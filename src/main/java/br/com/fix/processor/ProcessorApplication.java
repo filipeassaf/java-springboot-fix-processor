@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 
 import br.com.fix.processor.generator.FixMessageGenerator;
+import br.com.fix.processor.generator.FixMessageGenerator2;
 import br.com.fix.processor.handler.FixMessageHandler;
 
 @SpringBootApplication
@@ -26,6 +27,8 @@ public class ProcessorApplication implements CommandLineRunner {
 
     @Autowired
     private FixMessageGenerator generator;
+    @Autowired
+    private FixMessageGenerator2 generator2;
     @Autowired
     private FixMessageHandler handler;
 
@@ -46,10 +49,12 @@ public class ProcessorApplication implements CommandLineRunner {
         Scanner scanner = new Scanner(System.in);
         System.out.println("\nBem-vindo ao Fix Processor");
         System.out.println("Escolha uma opção:");
-        System.out.println("1 - Gerar input_fix.txt (Parte 1)");
-        System.out.println("2 - Gerar AllMsgs.csv (Parte 2.1)");
-        System.out.println("3 - Gerar FulFill.txt (Parte 2.2)");
-        System.out.println("4 - Executar tudo (1 > 2 > 3)");
+        System.out.println("1 - Gerar input_fix.txt (Parte 1 - Manual)");
+        System.out.println("2 - Gerar input_fix.txt (Parte 1 - QuickFIX/J)");
+        System.out.println("3 - Gerar AllMsgs.csv (Parte 2.1 - Manual)");
+        System.out.println("4 - Gerar AllMsgs.csv (Parte 2.1 - QuickFIX/J)");
+        System.out.println("5 - Gerar FulFill.txt (Parte 2.2)");
+        System.out.println("6 - Executar tudo (1 > 3 > 5)");
         System.out.println("0 - Sair");
         while (true) {
             System.out.print("Digite a opção: ");
@@ -63,23 +68,36 @@ public class ProcessorApplication implements CommandLineRunner {
                     break;
                 case 2:
                     Instant start2 = Instant.now();
-                    handler.processFixFile(inputPath, csvPath);
+                    generator2.generateFixMessages(inputPath);
                     Instant end2 = Instant.now();
-                    System.out.println("Arquivo AllMsgs.csv gerado com sucesso (" + Duration.between(start2, end2).toMillis() + " ms)");
+                    System.out.println("Arquivo input_fix.txt (QuickFIX/J) gerado com sucesso (" + Duration.between(start2, end2).toMillis() + " ms)");
                     break;
                 case 3:
                     Instant start3 = Instant.now();
-                    handler.processFullFills(inputPath, fulfillPath);
+                    handler.processFixFile(inputPath, csvPath);
                     Instant end3 = Instant.now();
-                    System.out.println("Arquivo FulFill.txt gerado com sucesso (" + Duration.between(start3, end3).toMillis() + " ms)");
+                    System.out.println("Arquivo AllMsgs.csv (Manual) gerado com sucesso (" + Duration.between(start3, end3).toMillis() + " ms)");
                     break;
                 case 4:
                     Instant start4 = Instant.now();
+                    br.com.fix.processor.handler.FixMessageHandler2 handler2 = new br.com.fix.processor.handler.FixMessageHandler2();
+                    handler2.processFixFile(inputPath, csvPath);
+                    Instant end4 = Instant.now();
+                    System.out.println("Arquivo AllMsgs.csv (QuickFIX/J) gerado com sucesso (" + Duration.between(start4, end4).toMillis() + " ms)");
+                    break;
+                case 5:
+                    Instant start5 = Instant.now();
+                    handler.processFullFills(inputPath, fulfillPath);
+                    Instant end5 = Instant.now();
+                    System.out.println("Arquivo FulFill.txt gerado com sucesso (" + Duration.between(start5, end5).toMillis() + " ms)");
+                    break;
+                case 6:
+                    Instant start6 = Instant.now();
                     generator.generateFixMessages(inputPath);
                     handler.processFixFile(inputPath, csvPath);
                     handler.processFullFills(inputPath, fulfillPath);
-                    Instant end4 = Instant.now();
-                    System.out.println("Todos arquivos gerados com sucesso. (" + Duration.between(start4, end4).toMillis() + " ms)");
+                    Instant end6 = Instant.now();
+                    System.out.println("Todos arquivos gerados com sucesso. (" + Duration.between(start6, end6).toMillis() + " ms)");
                     break;
                 case 0:
                     System.out.println("Encerrando aplicação.");
