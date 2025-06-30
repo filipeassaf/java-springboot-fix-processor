@@ -2,6 +2,10 @@
 
 Aplicação Java para geração e processamento de mensagens FIX, focada em análise de ordens, integração de sistemas e simulação de cenários do mercado financeiro. Permite criar massas de dados, processar arquivos e gerar relatórios para uso em ambientes de testes, homologação ou integração.
 
+**Tecnologias e recursos adicionais:**
+- Utiliza multithreading para processamento eficiente das mensagens.
+- Integração com a biblioteca [QuickFIX/J](https://www.quickfixj.org/) para manipulação do protocolo FIX.
+
 ## Menu principal da aplicação
 Ao executar a aplicação, você verá o seguinte menu no terminal:
 
@@ -27,6 +31,8 @@ Escolha uma opção:
 - Spring Boot (CLI e injeção de dependências)
 - JUnit 5 (testes automatizados)
 - Gradle (build, dependências e execução)
+- QuickFIX/J (protocolo FIX)
+- Multithreading (processamento paralelo)
 
 ## Como rodar o projeto
 1. **Clonar o repositório**
@@ -67,3 +73,10 @@ Edite o arquivo `src/main/resources/application.properties` para ajustar:
 
 ## Dúvidas?
 Abra uma issue ou entre em contato!
+
+## Melhorias Futuras
+
+- Implementar testes automatizados, incluindo cenários multi-thread e de integração.
+- Adicionar validação e tratamento de exceções mais detalhados.
+- Otimizar o desempenho das rotinas multi-thread.
+- Incluir métricas e logs para monitoramento do processamento.

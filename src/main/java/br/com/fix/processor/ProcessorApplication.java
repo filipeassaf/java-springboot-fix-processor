@@ -12,11 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 
 import br.com.fix.processor.generator.FixMessageGenerator;
-import br.com.fix.processor.generator.FixMessageGenerator2;
-import br.com.fix.processor.generator.FixMessageGenerator3;
 import br.com.fix.processor.handler.FixMessageHandler;
-import br.com.fix.processor.handler.FixMessageHandler2;
-import br.com.fix.processor.handler.FixMessageHandler3;
 
 @SpringBootApplication
 public class ProcessorApplication implements CommandLineRunner {
@@ -31,15 +27,7 @@ public class ProcessorApplication implements CommandLineRunner {
     @Autowired
     private FixMessageGenerator generator;
     @Autowired
-    private FixMessageGenerator2 generator2;
-    @Autowired
-    private FixMessageGenerator3 generator3;
-    @Autowired
     private FixMessageHandler handler;
-    @Autowired
-    private FixMessageHandler2 handler2;
-    @Autowired
-    private FixMessageHandler3 handler3;
 
     public static void main(String[] args) {
         SpringApplication.run(ProcessorApplication.class, args);
@@ -71,7 +59,7 @@ public class ProcessorApplication implements CommandLineRunner {
                 case 1:
                     Instant start1 = Instant.now();
                     try {
-                        generator3.generateFixMessagesMultiThread(inputPath, 4);
+                        generator.generateFixMessagesMultiThread(inputPath, 4);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -81,7 +69,7 @@ public class ProcessorApplication implements CommandLineRunner {
                 case 2:
                     Instant start2 = Instant.now();
                     try {
-                        handler3.processFixFileMultiThread(inputPath, csvPath, 4);
+                        handler.processFixFileMultiThread(inputPath, csvPath, 4);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -91,7 +79,7 @@ public class ProcessorApplication implements CommandLineRunner {
                 case 3:
                     Instant start3 = Instant.now();
                     try {
-                        handler3.processFullFillsMultiThread(inputPath, fulfillPath, 4);
+                        handler.processFullFillsMultiThread(inputPath, fulfillPath, 4);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -101,9 +89,9 @@ public class ProcessorApplication implements CommandLineRunner {
                 case 4:
                     Instant start4 = Instant.now();
                     try {
-                        generator3.generateFixMessagesMultiThread(inputPath, 4);
-                        handler3.processFixFileMultiThread(inputPath, csvPath, 4);
-                        handler3.processFullFillsMultiThread(inputPath, fulfillPath, 4);
+                        generator.generateFixMessagesMultiThread(inputPath, 4);
+                        handler.processFixFileMultiThread(inputPath, csvPath, 4);
+                        handler.processFullFillsMultiThread(inputPath, fulfillPath, 4);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
